@@ -4,22 +4,39 @@ import express from 'express';
 import axios from 'axios';
 import qs from 'querystring';
 import fs from 'fs';
+import {promises as fsPromises} from 'fs';
+import session from 'express-session';
 
 import dotenv from 'dotenv';
 dotenv.config();
 
+import cors from 'cors';
+
 const API_ENDPOINT = 'https://discord.com/api'
 const CLIENT_ID = '1132792157967745074'
-const REDIRECT_URI = 'http://localhost:3000/discord_oauth_redirect'
+const REDIRECT_URI = 'http://localhost:3000/auth/discord/callback'
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const TARGET_GUILD_ID = process.env.TARGET_GUILD_ID;
 const OAuth2URL = process.env.OAuth2URL;
 
-const app = express();
 const port = 3000;
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use(session({
+    secret: 'super_secret_string',
+    cookie: { secure: false, httpOnly: false }, // TODO change to true
+    resave: false,
+    saveUninitialized: true
+  }));
+
 
 app.get('/', (req, res) => {
-    res.redirect(OAuth2URL);
+    if (req.session.authenticated) {
+        res.send('You are logged in.');
+    } else {
+        res.redirect(OAuth2URL);
+    }
 });
 
 async function exchangeCodeForToken(code) {
@@ -75,7 +92,7 @@ app.get('/discord_oauth_redirect', async (req, res) => {
     const code = req.query.code;
     const accessToken = await exchangeCodeForToken(code);
     const userGuilds = await getUserGuilds(accessToken.access_token);
-    const userData = await getUserData(accessToken.access_token);
+    const userData = await getUserData(accessToken.access_token)
     // res.send(`Welcome, ${userData.username}#${userData.discriminator}!`); // TODO show processing message
     
     const isInTargetGuild = userGuilds.some(guild => guild.id === TARGET_GUILD_ID); // TODO add some logic here 
@@ -111,38 +128,140 @@ app.get('/discord_oauth_redirect', async (req, res) => {
         });
     }
     });
-    res.redirect('/users');
+    // now that we have the user's data, we can redirect them to the matches page
+    // need to pass on the access token to the matches page so it can make requests to the API
+    // res.redirect(`/matches?access_token=${accessToken.access_token}`);
+    req.session.authenticated = true;
+    req.session.accessToken = accessToken.access_token;
+    req.session.refreshToken = accessToken.refresh_token;
+    res.redirect('/');
 });
 
+// MATCHES PROCESSING
 
-app.use(express.json());
+// Assuming you have stored the user inputs in a dictionary-like object
+
+let userInputs = {
+    "987654321": {
+      "123456789": [
+        true,
+        false,
+        false
+      ],
+      "1003788193755299920": [
+        true,
+        false,
+        false
+      ],
+      "589352688744005653": [
+        false,
+        true,
+        true
+      ]
+    },
+    "123456789": {
+      "987654321": [
+        true,
+        true,
+        false
+      ],
+      "1003788193755299920": [
+        true,
+        false,
+        false
+      ],
+      "589352688744005653": [
+        false,
+        true,
+        true
+      ]
+    }
+  };
+
+async function calculateMatches(userId) { // can add userInputs as a parameter
+    // note that it outputs the matches as a map of username to array of mutually-matched indices.
+    // TODO need to create a function that maps indices to actual activities 
+
+        try {
+        const data = await fsPromises.readFile('users.json'); // TODO work out why this needs promises version
+        let users = JSON.parse(data);
+
+        // Create a map of discordId to username
+        let usernameMap = {};
+        for (let user of users) {
+            usernameMap[user.discordId] = user.username;
+        }
+
+        let matches = {};
+        let userPrefs = userInputs[userId];
+
+        for (let otherUserId in userInputs) {
+            if (otherUserId === userId) continue; // skip matching with self
+            let otherUserPrefs = userInputs[otherUserId];
+
+            for (let index in userPrefs[otherUserId]) {
+                console.log(userPrefs[otherUserId][index])
+                if (userPrefs[otherUserId][index] && otherUserPrefs[userId][index]) {
+                    let otherUsername = usernameMap[otherUserId];
+                    if (matches[otherUsername]) {
+                        matches[otherUsername].push(index);
+                    } else {
+                        matches[otherUsername] = [index];
+                    }
+                }
+            }
+        }
+        return matches;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+app.get('/matches', async (req, res) => {
+    const accessToken = req.query.access_token;
+    const userData = await getUserData(accessToken);
+    const calculatedMatches = await calculateMatches(userData.id);
+    res.send(`Welcome, ${userData.username}! Your matches are: ${JSON.stringify(calculatedMatches)}. 0 = hold hands, 1 = cuddle, 2 = lick feet`)
+});
+
+// USER INPUTS PROCESSING
 app.get('/users', async (req, res) => {
-    const isAuthenticated = true;
-
-    if (isAuthenticated) {
-
-        fs.readFile('users.json', (err, data) => {
-            if (err) throw err;
-            let users = JSON.parse(data);
-            let userCheckboxes = users.map(user => {
-              let checkboxes = '';
-              for(let i=1; i<=4; i++) {
-                checkboxes += `<label><input type="checkbox" name="${user.discordId}" value="${i}">${user.username}#${user.discriminator} Checkbox ${i}</label><br/>`;
-              }
-              return checkboxes;
-            }).join('<br/>');
-        
+    fs.readFile('users.json', (err, data) => {
+        if (err) throw err;
+        let users = JSON.parse(data);
+        let userCheckboxes = "";
+        for (let user of users) {
+        userCheckboxes += `
+        <fieldset>
+        <legend>${user.username}</legend>
+        <input type="checkbox" id="${user.username}-1">
+        <label for="${user.username}#${user.discriminator}1">Hold hands</label>
+        <br>
+        <input type="checkbox" id="${user.username}-2">
+        <label for="${user.username}#${user.discriminator}2">Cuddle</label>
+        <br>
+        <input type="checkbox" id="${user.username}-3">
+        <label for="${user.username}#${user.discriminator}3">Lick feet</label>
+        </fieldset>
+        `;
+    }
             let jsCode = `
             function getCheckboxValues() {
-                var result = {};
-                ${users.map(user => `
-                result["${user.username}"] = [];
-                $("input[name='${user.username}']:checked").each(function() {
-                    result["${user.username}"].push($(this).val());
-                });`).join('')}
-                return result;
+                const form = document.querySelector("#userList");
+                
+                let thoughts = {};
+                for (let i = 0; i < form.children.length; i++) {
+                    let thoughtsAboutOnePerson = [];
+                    for (let j = 0; j < form.children[i].children.length; j++) {
+                        if (form.children[i].children[j].nodeName === "INPUT") {
+                            thoughtsAboutOnePerson.push(form.children[i].children[j].checked);
+                        }
+                    }
+                    thoughts[form.children[i].children[0].textContent] = thoughtsAboutOnePerson;
+                }
+                return thoughts;
             }
-
+            
             $(document).ready(function() {
                 $('#submit').click(function() {
                     var result = getCheckboxValues();
@@ -150,7 +269,6 @@ app.get('/users', async (req, res) => {
                 });
             });
         `;
-        
             fs.readFile('users.html', 'utf8', (err, html) => {
               if (err) throw err;
               html = html.replace('{{userCheckboxes}}', userCheckboxes);
@@ -158,19 +276,34 @@ app.get('/users', async (req, res) => {
               res.send(html);
             });
           });
-
-
-    } else {
-        res.status(401).send('You must be logged in to view this information.');
-    }
 });
 
-app.post('/submit', (req, res) => {
-    console.log(req.body);
-    console.log("Received data");
-    res.send('Data received');
-  });
-  
+app.post('/submit', async (req, res) => {
+    fs.readFile('preferences.json', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('An error occurred while reading the preferences data.');
+            return;
+        }
+
+    let preferences = JSON.parse(data);
+    let discordId = '100'
+    let userPrefs = {
+        [discordId]: req.body
+    }
+    preferences = {...preferences, ...userPrefs}; // merge userPrefs into preferences
+
+        fs.writeFile('preferences.json', JSON.stringify(preferences, null, 2), (err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('An error occurred while writing the user data.');
+                return;
+            }
+    });
+});
+
+});
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
@@ -178,6 +311,11 @@ app.listen(port, () => {
 
 /*
 TODO
-- Allow users to select people and check off
-- Logic for if reciprocal
+- make landing page better
+  - button to get to input likes page
+  - shows matches better
+- make input likes page better
+  - don't display self
+  - display nicknames not usernames
+- work out why users.json needs promises version
 */

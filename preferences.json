@@ -1,0 +1,46 @@
+{
+  "100": {
+    "User3": [
+      true,
+      false,
+      false
+    ],
+    "User2": [
+      false,
+      true,
+      false
+    ],
+    "rohanselvaradov": [
+      true,
+      false,
+      false
+    ],
+    "duncanmcclements": [
+      false,
+      true,
+      true
+    ]
+  },
+  "User3": {
+    "100": [
+      true,
+      true,
+      false
+    ],
+    "User2": [
+      false,
+      true,
+      false
+    ],
+    "rohanselvaradov": [
+      true,
+      false,
+      false
+    ],
+    "duncanmcclements": [
+      false,
+      true,
+      true
+    ]
+  }
+}

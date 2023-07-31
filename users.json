@@ -1,12 +1,22 @@
 [
   {
     "discordId": "123456789",
-    "username": "User1",
+    "username": "User3",
     "discriminator": "1234"
   },
   {
     "discordId": "987654321",
     "username": "User2",
     "discriminator": "5678"
+  },
+  {
+    "discordId": "1003788193755299920",
+    "username": "rohanselvaradov",
+    "discriminator": "0"
+  },
+  {
+    "discordId": "589352688744005653",
+    "username": "duncanmcclements",
+    "discriminator": "0"
   }
 ]
