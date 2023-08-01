@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 import passport from 'passport';
 import { Strategy as DiscordStrategy } from 'passport-discord';
-
 import express from 'express';
 import session from 'express-session';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const API_ENDPOINT = 'https://discord.com/api'
@@ -94,3 +92,5 @@ app.listen(port, err => {
     if (err) return console.error(err);
     console.log(`Server running at http://localhost:${port}`);
   });
+
+  // https://github.com/stuyy/expressjs-tutorial/tree/d2d78d5011c369202adf4ba1c807acb1b376dfaf/src
