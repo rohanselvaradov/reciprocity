@@ -1,5 +1,11 @@
 # reciprocity
 
+## Table of contents
+- [The plan](#the-plan)
+    - [Users log in](#users-log-in)
+    - [Users submit preferences](#users-submit-preferences)
+    - [Users are matched](#users-are-matched)
+
 ## The plan
 
 ### Users log in
@@ -20,7 +26,7 @@ sub setup_user(user):
             DO redirect(error)
 ```
 
-## Users submit preferences
+### Users submit preferences
 - See other users and input preferences
   - Display all users with a guild in common
   - Checkboxes for each user
@@ -33,7 +39,7 @@ sub setup_user(user):
   - Locally generate random bitstring except for special bit, which is a 1 or 0 depending on preference
   - Pass bitstrings to server and store in database section associated with user
 
-## Users are matched
+### Users are matched
 - Server finds mutual matches
   - Every time a new bitstring is submitted, AND it with all other sibling bitstrings
   - Store result in the database section associated with the user
