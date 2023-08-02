@@ -25,6 +25,16 @@ app.use(passport.session());
 
 app.use('/auth', authRoute);
 
+app.get('/', (req, res) => {
+    res.send(`<a href="/auth/discord">Click here to login</a>`);
+});
+
+// TODO add /logout that calls req.logout() and redirects to /
+// TODO test with /secretstuff that redirects to / if not logged in
+  // use req.isAuthenticated() to check if logged in
+  // do you actually need to specify the failureRedirect?
+  // see lines 71 and 86 of login.js
+
 app.listen(PORT, err => {
     if (err) return console.error(err);
     console.log(`Server running at http://localhost:${PORT}`);
