@@ -1,18 +1,18 @@
 [
   {
-    "discordId": "123456789",
-    "username": "User3",
+    "id": "123456789",
+    "username": "User3"
   },
   {
-    "discordId": "987654321",
-    "username": "User2",
+    "id": "987654321",
+    "username": "User2"
   },
   {
-    "discordId": "1003788193755299920",
-    "username": "rohanselvaradov",
+    "id": "589352688744005653",
+    "username": "duncanmcclements"
   },
   {
-    "discordId": "589352688744005653",
-    "username": "duncanmcclements",
+    "id": "1003788193755299920",
+    "username": "rohanselvaradov"
   }
 ]

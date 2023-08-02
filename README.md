@@ -48,7 +48,22 @@ sub setup_user(user):
     - **This part is also shaky. How do we store all the indices of special bits?**
 
 
-  ## Actual files
-  - index.js
-  - auth.js
-  - discord.js
+ ## TODO
+ ### Critical
+- Check if auth secures secretstuff routes
+- Way of accepting user preferences
+- Reimplement matching on new version
+- Return matches to user
+
+ ### Important
+- Move over to MongoDB rather than JSON
+- Session storage so don't have to log in every time
+- Display nicknames from guild not the username
+- Verifies user is in a target guild
+
+### Nice-to-have
+- Bitstring approach to privacy
+- Logout with req.logout()
+
+### To roll out bigger
+- Allow joining from any guild and only show users with mutual guild memberships

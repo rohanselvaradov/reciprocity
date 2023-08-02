@@ -11,6 +11,11 @@ import './strategies/discord.js';
 // set up routes
 import authRoute from './routes/auth.js';
 
+function ensureAuthenticated(req, res, next) { // TODO work out if this should be elsewhere
+  if (req.isAuthenticated()) return next();
+  else res.redirect('/');
+}
+
 const app = express();
 const PORT = 3000;
 
@@ -29,11 +34,9 @@ app.get('/', (req, res) => {
     res.send(`<a href="/auth/discord">Click here to login</a>`);
 });
 
-// TODO add /logout that calls req.logout() and redirects to /
-// TODO test with /secretstuff that redirects to / if not logged in
-  // use req.isAuthenticated() to check if logged in
-  // do you actually need to specify the failureRedirect?
-  // see lines 71 and 86 of login.js
+app.get('/secretstuff', ensureAuthenticated, (req, res) => { // TODO might not put this here
+  res.send('Welcome to the secret area')
+});
 
 app.listen(PORT, err => {
     if (err) return console.error(err);

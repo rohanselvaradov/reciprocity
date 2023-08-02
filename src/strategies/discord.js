@@ -2,26 +2,60 @@
 
 import passport from 'passport';
 import { Strategy } from 'passport-discord';
+import { promises as fs } from 'fs';
 import dotenv from 'dotenv';
 dotenv.config();
 
 const CLIENT_ID = '1132792157967745074'
-const REDIRECT_URI = 'http://localhost:3000/auth/discord/callback' // TODO change to /auth/discord/redirect here, on Discord, and in auth.js
+const REDIRECT_URI = 'http://localhost:3000/auth/discord/callback'
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 const scopes = ['identify', 'guilds', 'guilds.members.read']
+
+async function findUser(id) {
+    try {
+        const data = await fs.readFile('database/users.json')
+        const users = JSON.parse(data);
+        const user = users.find((user) => user.id === id);
+        return user || null;
+    } catch (err) {
+        console.error(err);
+        return;
+    }
+};
+
+async function findOrCreateUser(profile) {
+    const user = await findUser(profile.id);
+    if (user) return user;
+    else {
+        try {
+            const data = await fs.readFile('database/users.json')
+            const { id, username } = profile;
+            const currentUser = { id, username } // TODO see if more concise way of doing this
+            let users = JSON.parse(data);
+            users.push(currentUser);
+            await fs.writeFile('database/users.json', JSON.stringify(users, null, 2));
+            return currentUser;
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+    }
+}
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
   
-passport.deserializeUser((id, done) => {
-    // temporarily hardcode a user object
-    const user = {
-        discordId: -1,
-        username: 'test_user',
-    };
-    done(null, user);
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await findUser(id);
+        if (!user) console.error(`User with id ${id} not found`);
+        done(null, user);
+    } catch (err) {
+        console.log(err);
+        done(err, null);
+    }
 });
 
 passport.use(new Strategy(
@@ -31,9 +65,9 @@ passport.use(new Strategy(
         callbackURL: REDIRECT_URI,
         scope: scopes
     },
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
         try {
-            const user = findOrCreateUser(profile); // TODO implement findOrCreateUser
+            const user = await findOrCreateUser(profile);
             return done(null, user);
         } catch (err) {
             console.log(err);
