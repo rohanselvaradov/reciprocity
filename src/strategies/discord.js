@@ -14,7 +14,7 @@ const scopes = ['identify', 'guilds', 'guilds.members.read']
 
 async function findUser(id) {
     try {
-        const data = await fs.readFile('database/users.json')
+        const data = await fs.readFile('database/users.json') // TODO check if this is right way to specify path (& ditto elsewhere)
         const users = JSON.parse(data);
         const user = users.find((user) => user.id === id);
         return user || null;

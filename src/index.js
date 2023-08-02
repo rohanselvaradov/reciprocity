@@ -10,11 +10,7 @@ import './strategies/discord.js';
 
 // set up routes
 import authRoute from './routes/auth.js';
-
-function ensureAuthenticated(req, res, next) { // TODO work out if this should be elsewhere
-  if (req.isAuthenticated()) return next();
-  else res.redirect('/');
-}
+import matchesRoute from './routes/matches.js'
 
 const app = express();
 const PORT = 3000;
@@ -28,7 +24,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+function ensureAuthenticated(req, res, next) { // TODO remove
+  if (req.isAuthenticated()) return next();
+  else res.redirect('/');
+}
+
 app.use('/auth', authRoute);
+app.use('/matches', matchesRoute); // TODO add ensureauthenticated either here or directly in matches.js
 
 app.get('/', (req, res) => {
     res.send(`<a href="/auth/discord">Click here to login</a>`);
