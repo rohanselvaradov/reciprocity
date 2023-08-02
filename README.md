@@ -46,3 +46,9 @@ sub setup_user(user):
   - Once user logs in, send all their stored results - or maybe only one (though we couldn't know if it's a match)
   - Results are interpreted and displayed locally
     - **This part is also shaky. How do we store all the indices of special bits?**
+
+
+  ## Actual files
+  - index.js
+  - auth.js
+  - discord.js

@@ -93,14 +93,13 @@ app.get('/discord_oauth_redirect', async (req, res) => {
     const accessToken = await exchangeCodeForToken(code);
     const userGuilds = await getUserGuilds(accessToken.access_token);
     const userData = await getUserData(accessToken.access_token)
-    // res.send(`Welcome, ${userData.username}#${userData.discriminator}!`); // TODO show processing message
+    // res.send(`Welcome, ${userData.username}!`); // TODO show processing message
     
     const isInTargetGuild = userGuilds.some(guild => guild.id === TARGET_GUILD_ID); // TODO add some logic here 
     
     const currentUser = {
         discordId: userData.id,
         username: userData.username,
-        discriminator: userData.discriminator,
     }
 
     fs.readFile('users.json', (err, data) => {
@@ -235,13 +234,13 @@ app.get('/users', async (req, res) => {
         <fieldset>
         <legend>${user.username}</legend>
         <input type="checkbox" id="${user.username}-1">
-        <label for="${user.username}#${user.discriminator}1">Hold hands</label>
+        <label for="${user.username}1">Hold hands</label>
         <br>
         <input type="checkbox" id="${user.username}-2">
-        <label for="${user.username}#${user.discriminator}2">Cuddle</label>
+        <label for="${user.username}2">Cuddle</label>
         <br>
         <input type="checkbox" id="${user.username}-3">
-        <label for="${user.username}#${user.discriminator}3">Lick feet</label>
+        <label for="${user.username}3">Lick feet</label>
         </fieldset>
         `;
     }
