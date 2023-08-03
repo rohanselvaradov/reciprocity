@@ -14,7 +14,7 @@ const scopes = ['identify', 'guilds', 'guilds.members.read']
 
 async function findUser(id) {
     try {
-        const data = await fs.readFile('database/users.json') // TODO check if this is right way to specify path (& ditto elsewhere)
+        const data = await fs.readFile('./src/database/users.json') // TODO check if this is right way to specify path (& ditto elsewhere)
         const users = JSON.parse(data);
         const user = users.find((user) => user.id === id);
         return user || null;
@@ -29,12 +29,12 @@ async function findOrCreateUser(profile) {
     if (user) return user;
     else {
         try {
-            const data = await fs.readFile('database/users.json')
+            const data = await fs.readFile('./src/database/users.json')
             const { id, username } = profile;
             const currentUser = { id, username } // TODO see if more concise way of doing this
             let users = JSON.parse(data);
             users.push(currentUser);
-            await fs.writeFile('database/users.json', JSON.stringify(users, null, 2));
+            await fs.writeFile('./src/database/users.json', JSON.stringify(users, null, 2));
             return currentUser;
         } catch (err) {
             console.error(err);

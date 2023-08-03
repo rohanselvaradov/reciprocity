@@ -50,12 +50,15 @@ sub setup_user(user):
 
  ## TODO
  ### Critical
-- Check if auth secures secretstuff routes
 - Way of accepting user preferences
-- Reimplement matching on new version
-- Return matches to user
+  - display multiple checkboxes for each user (public/preferences/script.js)
+  - turn from usernames into ids and store in json (ditto)
 
  ### Important
+- Work out how to protect certain routes, e.g. the preferences page
+- Display matches nicely
+  - Maybe a table with a row for each match
+  - Show nickname (or at least username) and not user ID
 - Move over to MongoDB rather than JSON
 - Session storage so don't have to log in every time
 - Display nicknames from guild not the username
@@ -63,6 +66,8 @@ sub setup_user(user):
 
 ### Nice-to-have
 - Bitstring approach to privacy
+- When you try and visit a page that requires login, it redirects you to the login page and then **back to the page you were trying to visit**
+  - Might do this with a ?redir= query parameter
 - Logout with req.logout()
 
 ### To roll out bigger

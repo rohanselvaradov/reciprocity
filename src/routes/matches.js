@@ -1,6 +1,7 @@
 import Router from 'express';
-const router = Router();
 import { promises as fs } from 'fs';
+
+const router = Router();
 
 // Assuming you have stored the user inputs in a dictionary-like object
 
@@ -46,7 +47,7 @@ async function calculateMatches(userId) {
     // TODO need to create a function that maps indices to actual activities 
 
         try {
-        const data = await fs.readFile('database/users.json');
+        const data = await fs.readFile('./src/database/users.json');
         let users = JSON.parse(data);
 
         let matches = {};
@@ -74,7 +75,7 @@ async function calculateMatches(userId) {
 }
 
 router.get('/', async (req, res) => {
-    const calculatedMatches = await calculateMatches(req.session.passport.user);
+    const calculatedMatches = await calculateMatches(req.user.id);
     res.send(`Welcome! Your matches are: ${JSON.stringify(calculatedMatches)}.`) // 0 = hold hands, 1 = cuddle, 2 = lick feet
 });
 
