@@ -11,7 +11,7 @@ router.get('/discord', passport.authenticate('discord'), (req, res) => {
   
 router.get('/discord/callback', passport.authenticate('discord'), (req, res) => {
     // res.sendStatus(200);
-    res.redirect('/preferences');
+    res.redirect('/matches');
 });
 
 export default router;

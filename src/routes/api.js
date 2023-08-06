@@ -18,9 +18,6 @@ router.get('/users', async (req, res) => { // used to provide list of usernames 
 
 router.post('/submit', express.json(), async (req, res) => { // used to accept user preferences from /preferences
     const { selectedItems } = req.body;
-    console.log(JSON.stringify(selectedItems));
-    console.log (req.user.username);
-    // TODO write to preferences.json
     try {
         const data = await fs.readFile('./src/database/new_preferences.json', 'utf8');
 

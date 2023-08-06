@@ -42,6 +42,19 @@ let userInputs = {
     }
   };
 
+userInputs = {
+  "987654321": {
+    "123456789": ["1"],
+    "1003788193755299920": ["1"],
+    "589352688744005653": ["2", "3"]
+  },
+  "1003788193755299920": {
+    "987654321": ["1", "2"],
+    "123456789": ["1"],
+    "589352688744005653": ["2", "3"]
+  }
+};
+
 async function calculateMatches(userId) {
     // note that it outputs the matches as a map of username to array of mutually-matched indices.
     // TODO need to create a function that maps indices to actual activities 
@@ -56,17 +69,18 @@ async function calculateMatches(userId) {
         for (let otherUserId in userInputs) {
             if (otherUserId === userId) continue; // skip matching with self
             let otherUserPrefs = userInputs[otherUserId];
-
-            for (let index in userPrefs[otherUserId]) {
-                // console.log(userPrefs[otherUserId][index])
-                if (userPrefs[otherUserId][index] && otherUserPrefs[userId][index]) {
-                    if (matches[otherUserId]) {
-                        matches[otherUserId].push(index);
-                    } else {
-                        matches[otherUserId] = [index];
-                    }
-                }
-            }
+            for (let key in userPrefs) {
+              if (key === otherUserId && otherUserPrefs[userId]) { // if the other user has preferences for the current user
+                  let commonPrefs = userPrefs[key].filter(pref => otherUserPrefs[userId].includes(pref));
+                  if (commonPrefs.length > 0) {
+                      if (matches[otherUserId]) {
+                          matches[otherUserId].push(...commonPrefs);
+                      } else {
+                          matches[otherUserId] = commonPrefs;
+                      }
+                  }
+              }
+          }
         }
         return matches;
     } catch (err) {
