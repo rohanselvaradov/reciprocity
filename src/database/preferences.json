@@ -1,43 +1,33 @@
 {
-  "100": {
-    "User3": [
+  "987654321": {
+    "123456789": [
       true,
       false,
       false
     ],
-    "User2": [
-      false,
-      true,
-      false
-    ],
-    "rohanselvaradov": [
+    "1003788193755299920": [
       true,
       false,
       false
     ],
-    "duncanmcclements": [
+    "589352688744005653": [
       false,
       true,
       true
     ]
   },
-  "User3": {
-    "100": [
+  "1003788193755299920": {
+    "987654321": [
       true,
       true,
       false
     ],
-    "User2": [
-      false,
-      true,
-      false
-    ],
-    "rohanselvaradov": [
+    "123456789": [
       true,
       false,
       false
     ],
-    "duncanmcclements": [
+    "589352688744005653": [
       false,
       true,
       true

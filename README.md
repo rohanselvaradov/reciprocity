@@ -51,7 +51,7 @@ sub setup_user(user):
  ## TODO
  ### Critical
 - Way of accepting user preferences
-  - display multiple checkboxes for each user (public/preferences/script.js)
+  - is it better to store as ["1", "2", "3"] (or integers), or as [true, true, true]
   - turn from usernames into ids and store in json (ditto)
 
  ### Important

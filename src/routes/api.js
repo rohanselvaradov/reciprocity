@@ -19,6 +19,24 @@ router.get('/users', async (req, res) => { // used to provide list of usernames 
 router.post('/submit', express.json(), async (req, res) => { // used to accept user preferences from /preferences
     const { selectedItems } = req.body;
     console.log(JSON.stringify(selectedItems));
+    console.log (req.user.username);
+    // TODO write to preferences.json
+    try {
+        const data = await fs.readFile('./src/database/new_preferences.json', 'utf8');
+
+    
+    const preferences = JSON.parse(data);
+    const userPrefs = {
+        [req.user.id]: selectedItems
+    }
+    const newPreferences = {...preferences, ...userPrefs}; // merge userPrefs into preferences
+
+        await fs.writeFile('./src/database/new_preferences.json', JSON.stringify(newPreferences, null, 2));
+    } catch (err) {
+        console.log(`Reading or writing to file: ${err}`);
+        res.sendStatus(500);
+    }
+    // TODO replace usernames with user ids
     return res.json({ message: 'Data received and processed successfully!' });
 });
 
