@@ -1,6 +1,7 @@
 import Router from 'express';
 import express from 'express';
 import { promises as fs } from 'fs'
+import { swapUsernameForId } from '../utils/helpers.js';
 const router = Router();
 
 router.get('/users', async (req, res) => { // used to provide list of usernames to populate checkbox page on /preferences
@@ -18,22 +19,27 @@ router.get('/users', async (req, res) => { // used to provide list of usernames 
 
 router.post('/submit', express.json(), async (req, res) => { // used to accept user preferences from /preferences
     const { selectedItems } = req.body;
-    try {
-        const data = await fs.readFile('./src/database/new_preferences.json', 'utf8');
-
-    
-    const preferences = JSON.parse(data);
-    const userPrefs = {
-        [req.user.id]: selectedItems
+    let selectedWithUsernames = {};
+    // replace all usernames (keys) with user ids using helpers.swapUsernameForId()
+    for (const key in selectedItems) {
+        // GPT suggests wrapping in `if (originalObject.hasOwnProperty(key)) {` check. Don't think necessary
+        const id = await swapUsernameForId(key)
+        selectedWithUsernames[id] = selectedItems[key];
     }
-    const newPreferences = {...preferences, ...userPrefs}; // merge userPrefs into preferences
+    try {
+        const data = await fs.readFile('./src/database/preferences.json', 'utf8');
+        const preferences = JSON.parse(data);
+        const userPrefs = {
+            [req.user.id]: selectedWithUsernames
+        }
+        const newPreferences = {...preferences, ...userPrefs}; // merge userPrefs into preferences
 
-        await fs.writeFile('./src/database/new_preferences.json', JSON.stringify(newPreferences, null, 2));
+        await fs.writeFile('./src/database/preferences.json', JSON.stringify(newPreferences, null, 2));
     } catch (err) {
         console.log(`Reading or writing to file: ${err}`);
-        res.sendStatus(500);
+        // res.sendStatus(500); // TODO this isn't sent as cannot set headers after they are sent 
     }
-    // TODO replace usernames with user ids
+    // TODO replace usernames with user ids using helpers.swapUsernamesForIds()
     return res.json({ message: 'Data received and processed successfully!' });
 });
 

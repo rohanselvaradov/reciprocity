@@ -49,10 +49,6 @@ sub setup_user(user):
 
 
  ## TODO
- ### Critical
-- Way of accepting user preferences
-  - is it better to store as ["1", "2", "3"] (or integers), or as [true, true, true]
-  - turn from usernames into ids and store in json (ditto)
 
  ### Important
 - Work out how to protect certain routes, e.g. the preferences page
@@ -72,3 +68,7 @@ sub setup_user(user):
 
 ### To roll out bigger
 - Allow joining from any guild and only show users with mutual guild memberships
+
+## Questions
+- is it better to store user preferences as ["1", "2", "3"] (or integers), or as [true, true, true]
+- is the method of storing prefs with IDs and then looking up the user when showing to clients clunky?
