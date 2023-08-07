@@ -32,7 +32,7 @@ router.post('/submit', express.json(), async (req, res) => { // used to accept u
         const userPrefs = {
             [req.user.id]: selectedWithUsernames
         }
-        const newPreferences = {...preferences, ...userPrefs}; // merge userPrefs into preferences
+        const newPreferences = { ...preferences, ...userPrefs }; // merge userPrefs into preferences
 
         await fs.writeFile('./src/database/preferences.json', JSON.stringify(newPreferences, null, 2));
     } catch (err) {

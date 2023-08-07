@@ -46,7 +46,7 @@ async function findOrCreateUser(profile) {
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
-  
+
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await findUser(id);

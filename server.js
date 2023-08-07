@@ -31,8 +31,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 function ensureAuthenticated(req, res, next) { // TODO remove
-  if (req.isAuthenticated()) return next();
-  else res.redirect('/');
+    if (req.isAuthenticated()) return next();
+    else res.redirect('/');
 }
 
 app.use('/auth', authRoute);
@@ -55,4 +55,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, err => {
     if (err) return console.error(err);
     console.log(`Server running at http://localhost:${PORT}`);
-  });
+});

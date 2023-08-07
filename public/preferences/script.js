@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     const form = document.getElementById('checkboxForm');
     const checkboxContainer = document.getElementById('checkboxContainer');
 
@@ -6,17 +6,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Fetch the names from the server-side endpoint
         const response = await fetch('/api/users');
         const data = await response.json();
-    
+
         // Generate checkboxes based on the data received from the server
         data.forEach(item => {
             // Create a new row for each user
             const row = document.createElement('tr');
-    
+
             // Add a cell for the user name
             const nameCell = document.createElement('td');
             nameCell.textContent = item;
             row.appendChild(nameCell);
-    
+
             // Add three checkboxes for each user
             for (let i = 1; i <= 3; i++) {
                 const checkboxCell = document.createElement('td');
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 checkboxCell.appendChild(checkboxLabel);
                 row.appendChild(checkboxCell);
             }
-    
+
             // Add the row to the table
             checkboxTable.appendChild(row);
         });
@@ -38,17 +38,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
-      
+
         const formData = new FormData(form);
         let selectedItems = {};
-      
+
         for (const [key, value] of formData.entries()) {
             const [itemName, userName, checkboxNumber] = key.split('-');
             if (!selectedItems[userName]) {
-              selectedItems[userName] = [];
+                selectedItems[userName] = [];
             }
-              selectedItems[userName].push(checkboxNumber);
-          }
+            selectedItems[userName].push(checkboxNumber);
+        }
 
         try {
             // Send the selectedItems array to the server using an AJAX request with async/await
