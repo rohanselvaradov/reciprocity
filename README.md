@@ -71,7 +71,8 @@ sub setup_user(user):
 - Logout with req.logout()
 - Better handling on callback if OAuth fails (should redirect to home rather than just say "unauthorised")
 - Deal with users leaving guilds (should no longer be able to log in)
-
+- Allow user to decide whether or not to "keep me signed in"
+- Refresh the session cookie so they stay logged in
 
 ### To roll out bigger
 - Allow joining from any guild and only show users with mutual guild memberships

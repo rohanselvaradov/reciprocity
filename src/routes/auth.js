@@ -9,7 +9,9 @@ router.get('/discord', passport.authenticate('discord'), (req, res) => {
     res.sendStatus(200);
 });
 
-router.get('/discord/callback', passport.authenticate('discord'), (req, res) => {
+router.get('/discord/callback', passport.authenticate('discord', {
+    failureRedirect: '/' // TODO add "flash" or similar to inform user about failure
+}), (req, res) => {
     res.redirect('/home');
 });
 

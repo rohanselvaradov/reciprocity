@@ -24,6 +24,9 @@ const PORT = 3000;
 
 app.use(session({
     secret: 'super_secret_crypto_string',
+    cookie: {
+        maxAge: 60000 * 60 * 24 * 30 // 1 month
+    },
     resave: false,
     saveUninitialized: false,
 }));
