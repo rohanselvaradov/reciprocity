@@ -6,6 +6,10 @@ import passport from 'passport';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import FileStore from 'session-file-store';
+const fileStoreOptions = {};
+const store = new (FileStore(session))(fileStoreOptions);
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -29,6 +33,7 @@ app.use(session({
     },
     resave: false,
     saveUninitialized: false,
+    store: store
 }));
 
 app.use(passport.initialize());
