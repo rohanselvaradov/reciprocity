@@ -9,6 +9,7 @@ dotenv.config();
 const CLIENT_ID = '1132792157967745074'
 const REDIRECT_URI = 'http://localhost:3000/auth/discord/callback'
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const TARGET_GUILD_ID = process.env.TARGET_GUILD_ID;
 
 const scopes = ['identify', 'guilds', 'guilds.members.read']
 
@@ -29,6 +30,9 @@ async function findOrCreateUser(profile) {
     if (user) return user;
     else {
         try {
+            if (!profile.guilds.some((guild) => guild.id === TARGET_GUILD_ID)) {
+                throw new Error('User is not in the target guild');
+            }
             const data = await fs.readFile('./src/database/users.json')
             const { id, username } = profile;
             const currentUser = { id, username } // TODO see if more concise way of doing this
@@ -68,6 +72,7 @@ passport.use(new Strategy(
     async (accessToken, refreshToken, profile, done) => {
         try {
             const user = await findOrCreateUser(profile);
+            // TODO also get the nickname with another API call
             return done(null, user);
         } catch (err) {
             console.log(err);

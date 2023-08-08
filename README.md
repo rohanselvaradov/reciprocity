@@ -51,20 +51,26 @@ sub setup_user(user):
  ## TODO
 
  ### Important
-- Work out how to protect certain routes, e.g. the preferences page
+ - Display nicknames from guild not the username
+
+- use JS to either display CTA login or the `Click here to see your matches, and here to update your preferences!` text depending on whether the user is logged in
+  - needs some kind of server side check to see if user is logged in
+- Session storage so don't have to log in every time
+
 - Display matches nicely
   - Maybe a table with a row for each match
-  - Show nickname (or at least username) and not user ID
+  - Show nickname and not username
+- Decide whether to change how matches is served (e.g. make it like preferences?)
 - Move over to MongoDB rather than JSON
-- Session storage so don't have to log in every time
-- Display nicknames from guild not the username
-- Verifies user is in a target guild
 
 ### Nice-to-have
 - Bitstring approach to privacy
 - When you try and visit a page that requires login, it redirects you to the login page and then **back to the page you were trying to visit**
   - Might do this with a ?redir= query parameter
 - Logout with req.logout()
+- Better handling on callback if OAuth fails (should redirect to home rather than just say "unauthorised")
+- Deal with users leaving guilds (should no longer be able to log in)
+
 
 ### To roll out bigger
 - Allow joining from any guild and only show users with mutual guild memberships
