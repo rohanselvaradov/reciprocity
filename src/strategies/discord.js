@@ -3,6 +3,7 @@
 import passport from 'passport';
 import { Strategy } from 'passport-discord';
 import { promises as fs } from 'fs';
+import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -25,7 +26,7 @@ async function findUser(id) {
     }
 };
 
-async function findOrCreateUser(profile) {
+async function findOrCreateUser(profile, accessToken) {
     const user = await findUser(profile.id);
     if (user) return user;
     else {
@@ -33,12 +34,19 @@ async function findOrCreateUser(profile) {
             if (!profile.guilds.some((guild) => guild.id === TARGET_GUILD_ID)) {
                 throw new Error('User is not in the target guild');
             }
-            const data = await fs.readFile('./src/database/users.json')
+            const existingUsers = await fs.readFile('./src/database/users.json')
             const { id, username } = profile;
-            const currentUser = { id, username } // TODO see if more concise way of doing this
-            let users = JSON.parse(data);
-            users.push(currentUser);
-            await fs.writeFile('./src/database/users.json', JSON.stringify(users, null, 2));
+            const guildData = await axios.get(`https://discord.com/api/users/@me/guilds/${TARGET_GUILD_ID}/member`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            let { nick } = guildData.data;
+            if (!nick) nick = username;
+            const currentUser = { id, username, nick }; // TODO see if more concise way of doing this
+            let newUsers = JSON.parse(existingUsers);
+            newUsers.push(currentUser);
+            await fs.writeFile('./src/database/users.json', JSON.stringify(newUsers, null, 2));
             return currentUser;
         } catch (err) {
             console.error(err);
@@ -71,7 +79,7 @@ passport.use(new Strategy(
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
-            const user = await findOrCreateUser(profile);
+            const user = await findOrCreateUser(profile, accessToken);
             // TODO also get the nickname with another API call
             return done(null, user);
         } catch (err) {

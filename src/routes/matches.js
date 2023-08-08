@@ -1,6 +1,6 @@
 import Router from 'express';
 import { promises as fs } from 'fs';
-import { swapIdForUsername } from '../utils/helpers.js';
+import { swapIdForNickname } from '../utils/helpers.js';
 
 const router = Router();
 
@@ -39,12 +39,12 @@ async function calculateMatches(userId) {
 
 router.get('/', async (req, res) => {
     const calculatedMatches = await calculateMatches(req.user.id);
-    let matchesWithUsernames = {};
+    let matchesWithNicknames = {};
     for (const key in calculatedMatches) {
-        const username = await swapIdForUsername(key);
-        matchesWithUsernames[username] = calculatedMatches[key];
+        const nick = await swapIdForNickname(key);
+        matchesWithNicknames[nick] = calculatedMatches[key];
     }
-    res.send(`Welcome! Your matches are: ${JSON.stringify(matchesWithUsernames)}.`) // 0 = hold hands, 1 = cuddle, 2 = lick feet
+    res.send(`Welcome! Your matches are: ${JSON.stringify(matchesWithNicknames)}.`) // 0 = hold hands, 1 = cuddle, 2 = lick feet
 });
 
 export default router

@@ -5,18 +5,16 @@ export function ensureAuthenticated(req, res, next) {
     else res.redirect('/');
 }
 
-export async function swapUsernameForId(username) {
+export async function swapNicknameForId(nick) {
     const data = await fs.readFile('./src/database/users.json', 'utf8');
     const users = JSON.parse(data);
-    const user = users.find(user => user.username === username);
+    const user = users.find(user => user.nick === nick);
     return user.id;
 }
 
-// maybe also swap ids for usernames?
-
-export async function swapIdForUsername(id) {
+export async function swapIdForNickname(id) {
     const data = await fs.readFile('./src/database/users.json', 'utf8');
     const users = JSON.parse(data);
     const user = users.find(user => user.id === id);
-    return user.username;
+    return user.nick;
 }

@@ -50,18 +50,19 @@ sub setup_user(user):
 
  ## TODO
 
- ### Important
- - Display nicknames from guild not the username
+### Upgrades
+- Move over to MongoDB rather than JSON?
+- Use discord.js??
 
+ ### Important
+ - Session storage so don't have to log in every time
 - use JS to either display CTA login or the `Click here to see your matches, and here to update your preferences!` text depending on whether the user is logged in
   - needs some kind of server side check to see if user is logged in
-- Session storage so don't have to log in every time
 
 - Display matches nicely
   - Maybe a table with a row for each match
   - Show nickname and not username
 - Decide whether to change how matches is served (e.g. make it like preferences?)
-- Move over to MongoDB rather than JSON
 
 ### Nice-to-have
 - Bitstring approach to privacy

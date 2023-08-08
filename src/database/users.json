@@ -1,18 +1,22 @@
 [
   {
     "id": "123456789",
-    "username": "User3"
+    "username": "User3",
+    "nick": "User3"
   },
   {
     "id": "987654321",
-    "username": "User2"
+    "username": "User2",
+    "nick": "user numero dos"
   },
   {
     "id": "589352688744005653",
-    "username": "duncanmcclements"
+    "username": "duncanmcclements",
+    "nick": "Duncan McClements"
   },
   {
     "id": "1003788193755299920",
-    "username": "rohanselvaradov"
+    "username": "rohanselvaradov",
+    "nick": "rohanselvaradov"
   }
 ]
