@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
         const nick = await swapIdForNickname(key);
         matchesWithNicknames[nick] = calculatedMatches[key];
     }
-    res.send(`Welcome! Your matches are: ${JSON.stringify(matchesWithNicknames)}.`) // 0 = hold hands, 1 = cuddle, 2 = lick feet
+    res.send(`Welcome! Your matches are: ${JSON.stringify(matchesWithNicknames)}.`)
 });
 
 export default router

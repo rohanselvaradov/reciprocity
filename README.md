@@ -55,12 +55,11 @@ sub setup_user(user):
 - Use discord.js??
 
  ### Important
-- Display matches nicely
-  - Maybe a table with a row for each match
-- Decide whether to change how matches is served (e.g. make it like preferences?)
 - Decide whether to use ejs rather than sending HTML files assembled using JS
 
 ### Nice-to-have
+- Make matches page look nicer
+  - Deal with if user has no matches
 - Bitstring approach to privacy
 - When you try and visit a page that requires login, it redirects you to the login page and then **back to the page you were trying to visit**
   - Might do this with a ?redir= query parameter

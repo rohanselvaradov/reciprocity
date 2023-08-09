@@ -1,7 +1,7 @@
 import Router from 'express';
 import express from 'express';
 import { promises as fs } from 'fs'
-import { swapNicknameForId } from '../utils/helpers.js';
+import { swapNicknameForId, calculateMatches } from '../utils/helpers.js';
 const router = Router();
 
 router.get('/users', async (req, res) => { // used to provide list of nicknames to populate checkbox page on /preferences
@@ -41,6 +41,13 @@ router.post('/submit', express.json(), async (req, res) => { // used to accept u
     }
     // TODO replace usernames with user ids using helpers.swapUsernamesForIds()
     return res.json({ message: 'Data received and processed successfully!' });
+});
+
+router.get('/matches', async (req, res) => { // used to provide matches to /matches
+    const matches = await calculateMatches(req.user.id);
+    console.log(`Matches for ${req.user.nick}: ${JSON.stringify(matches)}`)
+    res.json(matches);
+   
 });
 
 export default router;

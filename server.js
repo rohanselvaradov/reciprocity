@@ -23,7 +23,7 @@ import { ensureAuthenticated } from './src/utils/helpers.js';
 
 // set up routes
 import authRoute from './src/routes/auth.js';
-import matchesRoute from './src/routes/matches.js'
+import matchesRoute from './src/routes/DEPRECATED_matches.js'
 import apiRoute from './src/routes/api.js'
 
 const app = express();
@@ -45,13 +45,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', authRoute);
-app.use('/matches', ensureAuthenticated, matchesRoute); // TODO work out if this is best place to do the ensureAuthenticated
-app.use('/api', ensureAuthenticated, apiRoute);
+app.use('/api', ensureAuthenticated, apiRoute); // TODO work out if this is best place to do the ensureAuthenticated
 
 app.use(express.static('public'));
 
 app.get('/preferences', ensureAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'protected', 'preferences', 'index.html'))
+});
+
+app.get('/matches', ensureAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'protected', 'matches', 'index.html'))
 });
 
 app.get('/', (req, res) => {
