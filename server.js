@@ -49,6 +49,14 @@ app.use('/api', ensureAuthenticated, apiRoute); // TODO work out if this is best
 
 app.use(express.static('public'));
 
+app.get('/', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.render('home_authenticated', { user: req.user });
+    } else {
+        res.render('home_guest')
+    }
+});
+
 app.get('/preferences', ensureAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'protected', 'preferences', 'index.html'))
 });
@@ -57,12 +65,11 @@ app.get('/matches', ensureAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'protected', 'matches', 'index.html'))
 });
 
-app.get('/', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.render('home_authenticated', { user: req.user });
-    } else {
-        res.render('home_guest')
-    }
+app.post('/logout', function(req, res, next) {
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/');
+    });
 });
 
 app.listen(PORT, err => {

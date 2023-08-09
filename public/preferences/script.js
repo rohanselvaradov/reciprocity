@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const form = document.getElementById('checkboxForm');
-    const checkboxContainer = document.getElementById('checkboxContainer');
 
     try {
         // Fetch the names from the server-side endpoint
@@ -79,7 +78,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
 
             const data = await response.json();
-            console.log(data);
         } catch (error) {
             console.error(error);
         }

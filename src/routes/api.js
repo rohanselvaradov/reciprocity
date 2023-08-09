@@ -45,7 +45,6 @@ router.post('/submit', express.json(), async (req, res) => { // used to accept u
 
 router.get('/matches', async (req, res) => { // used to provide matches to /matches
     const matches = await calculateMatches(req.user.id);
-    console.log(`Matches for ${req.user.nick}: ${JSON.stringify(matches)}`)
     res.json(matches);
    
 });
