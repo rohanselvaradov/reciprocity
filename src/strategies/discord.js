@@ -80,7 +80,6 @@ passport.use(new Strategy(
     async (accessToken, refreshToken, profile, done) => {
         try {
             const user = await findOrCreateUser(profile, accessToken);
-            // TODO also get the nickname with another API call
             return done(null, user);
         } catch (err) {
             console.log(err);

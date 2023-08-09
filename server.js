@@ -3,11 +3,14 @@
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
+import ejs from 'ejs';
 import dotenv from 'dotenv';
 dotenv.config();
 
 import FileStore from 'session-file-store';
-const fileStoreOptions = {};
+const fileStoreOptions = {
+    retries: 0
+};
 const store = new (FileStore(session))(fileStoreOptions);
 
 import path from 'path';
@@ -25,6 +28,8 @@ import apiRoute from './src/routes/api.js'
 
 const app = express();
 const PORT = 3000;
+
+app.set('view engine', 'ejs');
 
 app.use(session({
     secret: 'super_secret_crypto_string',
@@ -49,8 +54,12 @@ app.get('/preferences', ensureAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'protected', 'preferences', 'index.html'))
 });
 
-app.get('/home', ensureAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'protected', 'home', 'index.html'))
+app.get('/', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.render('home_authenticated', { user: req.user });
+    } else {
+        res.render('home_guest')
+    }
 });
 
 app.listen(PORT, err => {
