@@ -20,7 +20,6 @@ router.get('/users', async (req, res) => { // used to provide list of nicknames 
 router.post('/submit', express.json(), async (req, res) => { // used to accept user preferences from /preferences
     const { selectedItems } = req.body;
     let selectedWithUsernames = {};
-    // replace all usernames (keys) with user ids using helpers.swapNicknameForId()
     for (const key in selectedItems) {
         // GPT suggests wrapping in `if (originalObject.hasOwnProperty(key)) {` check. Don't think necessary
         const id = await swapNicknameForId(key)
@@ -37,10 +36,9 @@ router.post('/submit', express.json(), async (req, res) => { // used to accept u
         await fs.writeFile('./src/database/preferences.json', JSON.stringify(newPreferences, null, 2));
     } catch (err) {
         console.log(`Reading or writing to file: ${err}`);
-        // res.sendStatus(500); // TODO this isn't sent as cannot set headers after they are sent 
+        // res.sendStatus(500); // NOTE this isn't sent as cannot set headers after they are sent 
     }
-    // TODO replace usernames with user ids using helpers.swapUsernamesForIds()
-    return res.json({ message: 'Data received and processed successfully!' });
+    return res.json({ message: 'Data received and processed successfully!' }); // TODO visual confirmation of submitting not in console
 });
 
 router.get('/matches', async (req, res) => { // used to provide matches to /matches

@@ -1,0 +1,19 @@
+<header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <% if (isAuthenticated) { %>
+                <li><a href="/matches">Matches</a></li>
+                <li><a href="/preferences">Preferences</a></li>
+                <form action="/logout" method="post">
+                    <!-- TODO add CSRF token for protection -->
+                    <button class="logout" type="submit">Sign out</button>
+                </form>
+            <% } else { %>
+                <li><a href="/auth/discord">Login</a></li>
+            <%}%>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>

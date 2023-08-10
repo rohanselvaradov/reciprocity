@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<%- include('../partials/head') %>
+
+<head>
+    <title>Reciprocity | Home</title>
+</head>
+
+<body>
+    <%- include('../partials/navbar') %>
+    <h1>Welcome to Reciprocity!</h1>
+    <h2><em>Helping to solve collective action problems, one partnership at a time.</em></h2>
+    <% if (isAuthenticated) { %>
+        <p>Click <a href="/matches">here</a> to see your matches, and <a href="/preferences">here</a> to update your
+            preferences!</p>
+    <% } else { %>
+        <p>Click <a href='/auth/discord'>here</a> to log in!</p>
+    <% } %>
+</body>
+
+</html>

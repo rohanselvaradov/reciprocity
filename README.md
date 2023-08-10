@@ -13,9 +13,10 @@
 - Make matches page look nicer
   - Deal with if user has no matches
 - Bitstring approach to privacy
+#### Logging in
 - When you try and visit a page that requires login, it redirects you to the login page and then **back to the page you were trying to visit**
   - Might do this with a ?redir= query parameter
-- Better handling on callback if OAuth fails (should redirect to home rather than just say "unauthorised")
+- Better handling on callback if OAuth fails (maybe give a message)
 - Deal with users leaving guilds (should no longer be able to log in)
 - Allow user to decide whether or not to "keep me signed in"
 - Refresh the session cookie so they stay logged in

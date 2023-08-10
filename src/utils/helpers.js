@@ -46,7 +46,7 @@ export async function calculateMatches(userId) {
                 }
             }
         }
-        let matchesWithNicknames = {}; // TODO there might be a way to do this without creating a new object (i.e. build up the matches object with nicknames instead of ids)
+        let matchesWithNicknames = {}; // NOTE is there a way to do this without creating a new object? (i.e. build up the matches object with nicknames instead of ids)
         for (const key in matches) {
             const nick = await swapIdForNickname(key);
             matchesWithNicknames[nick] = matches[key];
