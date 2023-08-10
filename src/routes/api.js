@@ -42,9 +42,15 @@ router.post('/submit', express.json(), async (req, res) => { // used to accept u
 });
 
 router.get('/matches', async (req, res) => { // used to provide matches to /matches
-    const matches = await calculateMatches(req.user.id);
-    res.json(matches);
-   
+    try {
+        const data = await fs.readFile('./src/database/preferences.json');
+        let preferences = JSON.parse(data);
+        const matches = await calculateMatches(req.user.id, preferences);
+        res.json(matches);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }   
 });
 
 export default router;

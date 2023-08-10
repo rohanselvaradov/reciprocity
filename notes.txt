@@ -1,0 +1,23 @@
+# High level
+- Generate a k-len binary sequence
+- Select an index and communicate it securely with other party without the server knowing
+- Set the bit at that position to the desired value
+  - This needs to be done on the client side in a way such that the server doesn't know the bit that got changed
+- Send to server, AND with other party's submission
+  - Server can store the sequence as plaintext until the later party submits
+- Receive back result, check the bit at the position
+
+- There needs to be a sequence produced for each combination in the product of users and match options?
+
+function getRandomBitstring(k) {
+    RETURN a randomly generated binary array of length k 
+}
+
+const k = SOME_VALUE
+
+bitstrings = {}
+otherUsers.forEach(u => {
+    options.forEach(o ={
+        bitstrings[u][o] = getRandomBitstring(k)
+    });
+});

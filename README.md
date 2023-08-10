@@ -3,11 +3,15 @@
 
 ### From Uli
 - `calculateMatches` seems overly complicated
+  ==> new version written, just need to check how to get it to handle nicknames
 - it might be good to have more pure functions, separating the logic from file operations can be useful for testing & reasoning about code
 - you should probably move the js in public to protected so the files that use each other are next to each other
+  ==> think I tried that before and it didn't work?
 - the web UI could be improved css-wise
 - you should probably be consistent between axios and fetch (axios being used once)
 - security
+- it's probably good to allow people to select matches on the homepage rather than having to navigate to /preferences and /matches. you're close to a single page app already, might as well combine
+- yeah you could use ejs instead of api requests clientside. clientside api reqs are more flexible long term though, you can do stuff without reloading, though for /matches it's currently kinda pointless
 
 ### Upgrades
 - Move over to MongoDB rather than JSON?

@@ -19,41 +19,22 @@ export async function swapIdForNickname(id) {
     return user.nick;
 }
 
-export async function calculateMatches(userId) {
-    // note that it outputs the matches as a map of nickname to array of mutually-matched indices.
-    // TODO need to create a function that maps indices to actual activities 
-
-    try {
-        const data = await fs.readFile('./src/database/preferences.json');
-        let preferences = JSON.parse(data);
-
-        let matches = {};
-        let userPrefs = preferences[userId];
-
-        for (let otherUserId in preferences) {
-            if (otherUserId === userId) continue; // skip matching with self
-            let otherUserPrefs = preferences[otherUserId];
-            for (let key in userPrefs) {
-                if (key === otherUserId && otherUserPrefs[userId]) { // if the other user has some preferences for the current user
-                    let commonPrefs = userPrefs[key].filter(pref => otherUserPrefs[userId].includes(pref));
-                    if (commonPrefs.length > 0) {
-                        if (matches[otherUserId]) {
-                            matches[otherUserId].push(...commonPrefs);
-                        } else {
-                            matches[otherUserId] = commonPrefs;
-                        }
-                    }
-                }
+export async function calculateMatches(myUserId, preferences) {
+    const matches = Object.keys(preferences).reduce((matches, theirUserId) => {
+        if (theirUserId !== myUserId) {
+            const thingsIdDo = preferences[myUserId]?.[theirUserId] ?? [];
+            const thingsTheydDo = preferences[theirUserId]?.[myUserId] ?? [];
+            const thingsInCommon = thingsIdDo.filter(thing => thingsTheydDo.includes(thing));
+            if (thingsInCommon.length > 0) {
+                matches[theirUserId] = thingsInCommon;
             }
         }
-        let matchesWithNicknames = {}; // NOTE is there a way to do this without creating a new object? (i.e. build up the matches object with nicknames instead of ids)
-        for (const key in matches) {
-            const nick = await swapIdForNickname(key);
-            matchesWithNicknames[nick] = matches[key];
-        }
-        return matchesWithNicknames;
-    } catch (err) {
-        console.error(err);
-        return;
+        return matches;
+    }, {});
+    let matchesWithNicknames = {}; // NOTE is there a way to do this without creating a new object? (i.e. build up the matches object with nicknames instead of ids)
+    for (const key in matches) {
+        const nick = await swapIdForNickname(key);
+        matchesWithNicknames[nick] = matches[key];
     }
-}
+    return matchesWithNicknames;
+};
