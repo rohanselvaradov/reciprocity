@@ -7,8 +7,8 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const CLIENT_ID = '1132792157967745074'
-const REDIRECT_URI = 'http://localhost:3000/auth/discord/callback'
+const CLIENT_ID = process.env.CLIENT_ID;
+const REDIRECT_URI = process.env.REDIRECT_URI;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const TARGET_GUILD_ID = process.env.TARGET_GUILD_ID;
 

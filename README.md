@@ -1,6 +1,14 @@
 # reciprocity
 ## TODO
 
+### From Uli
+- `calculateMatches` seems overly complicated
+- it might be good to have more pure functions, separating the logic from file operations can be useful for testing & reasoning about code
+- you should probably move the js in public to protected so the files that use each other are next to each other
+- the web UI could be improved css-wise
+- you should probably be consistent between axios and fetch (axios being used once)
+- security
+
 ### Upgrades
 - Move over to MongoDB rather than JSON?
 - Use discord.js??
