@@ -14,6 +14,8 @@
     <% if (isAuthenticated) { %>
         <p>Click <a href="/matches">here</a> to see your matches, and <a href="/preferences">here</a> to update your
             preferences!</p>
+            <%# include('../partials/matches') %>
+            <%# include('../partials/preferences') %>
     <% } else { %>
         <p>Click <a href='/auth/discord'>here</a> to log in!</p>
     <% } %>

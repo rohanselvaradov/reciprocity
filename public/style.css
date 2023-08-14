@@ -2,7 +2,60 @@ table {
     border-collapse: collapse;
 }
 
-td, th {
+td,
+th {
     border: 1px solid black;
     padding: 8px;
+}
+
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    /* https://systemfontstack.com/ */
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
+        helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+    line-height: 1.5;
+    max-width: 70ch;
+    /* 70 character max width */
+    padding: 8px;
+    /* padding for small screens (eg. mobile) */
+    margin: 0 auto;
+    /* center horizontally */
+    color: #333;
+    /* reduce constrast (optional?) */
+}
+
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    /* Display items horizontally */
+}
+
+.nav li {
+    margin-right: 20px;
+}
+
+.nav li:last-child {
+    margin-right: 0;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.nav a {
+    color: #fff;
+}
+
+a:hover {
+    text-decoration: underline;
 }
